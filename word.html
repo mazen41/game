@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ff8ba7, #ff6085);
+
+        }
+
+        #options div {
+            background: #ff8ba7;
+            font-size: 23px;
+            padding: 11px;
+            border-radius: 8px;
+        }
+
+        .quiz-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: #F44336;
+
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .option img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .option {
+            display: inline-block;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        #result {
+            font-size: 22px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #image-container img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <div id="question" class="question"></div>
+        <div id="image-container"></div>
+        <div id="options"></div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            { question: "ايه اكتر صوره بحبها ليكي من دول؟", options: ["./imgs/imageOne.jpg", "./imgs/imageSix.jpg", "./imgs/imageFive.jpg", "./imgs/imageTen.jpg"], answer: "./imgs/imageOne.jpg", image: "" },
+            { question: "ايه اكتر اكله انا بحبها ؟", options: ["محشي", "مكرونه بشاميل", "مكرونه و بانيه",], answer: "محشي", image: "" },
+            { question: "اكتر يوم كنت مبسوط فيه معاكي ؟", options: ["اول يوم شوفتك فيه", "لما نزلنا الزمالك", "لما اديتك الورد", "اخر يوم شغل ليكي"], answer: "لما اديتك الورد", image: "" },
+            { question: "ايه اسم اكتر فيلم بحبو؟", options: ["Your Name", "Your Lie in April", "The Silence Voice", "Weathring With You"], answer: "Your Name", image: "" },
+            { question: "اسم الأغنيه الي قولتلك دي ليكي", options: ["مولاتي", "بتوصفني", "هو انت مين"], answer: "مولاتي", image: "cat.jpg" },
+            { question: "اكتر اسم بحب اقولهولك", options: ["منون", "منونتي", "روحي", "فراولايتي"], answer: "فراولايتي", image: "" },
+            { question: "ايه اكتر لون بحبه؟", options: ["اسود", "ابيض", "احمر", "لبني"], answer: "اسود", image: "" },
+            { question: "اكتر حاجه بحبها فيكي ؟", options: ["صراحتك", "جمالك", "طريقتك", "طبيعتك"], answer: "طبيعتك", image: "" },
+            { question: "ليه بحبك ؟", options: ["عشان بتحبيني", "عشان طبيعيه", "عشان جميله"], answer: "عشان بتحبيني", image: "" },
+            { question: "انا نفسي ف ايه ؟", options: ["اكون كل حاجه ف حياتك", "تفضلي معايا"], answer: "اكون كل حاجه ف حياتك", image: "" },
+            { question: "انا لسه بحبك؟", options: ["اه اوي ", "لأ خالص"], answer: "اه اوي", image: "" },
+            { question: "انتي لسه بتحبيني", options: ["اه اوي ", "لأ خالص"], answer: "اه اوي", image: "" },
+        ];
+
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            if (currentQuestionIndex < quizData.length) {
+                const { question, options, image } = quizData[currentQuestionIndex];
+                document.getElementById("question").innerText = question;
+                document.getElementById("image-container").innerHTML = image ? `<img src="${image}" alt="Question Image">` : "";
+
+                // Check if the options are image URLs or text
+                document.getElementById("options").innerHTML = options.map(option => {
+                    if (option.endsWith('.jpg') || option.endsWith('.png') || option.endsWith('.jpeg')) {
+                        return `<div class='option' onclick='checkAnswer("${option}")'><img src="${option}" alt="Option"></div>`;
+                    } else {
+                        return `<div class='option' onclick='checkAnswer("${option}")'>${option}</div>`;
+                    }
+                }).join("");
+            } else {
+                document.getElementById("question").innerText = "Quiz Completed!";
+                document.getElementById("image-container").innerHTML = "";
+                document.getElementById("options").innerHTML = "";
+                document.getElementById("result").innerText = `بس كفايه كده عمتا انتي جاوبتي علي   ${score} اسئله صح
+                    ${'مظنش اقدر اعبر بالكلام بجد ايه انتي وحشتيني وحشني صوتك و هزارك و رخامتك و كل حاجه فيكي وحشاني قد نفسي اشوفك ولا عمري هعرف اعبر قد ايه انا بحبك بجد واتمني اتمني بجد رفم الي حصل بينا ميكونش فعلا قولتي اني مبقتش احبك لأن ده عمره م حصل من ساعه م عرفتك يا منه و من ساعه م ادتيني كل حاجه مكنتش عندي ولا عمري حسيت بيها       قولت اني مش هحب حد قدك و اني هفضل احبك مهما حصل و مهما عملتي مهما حصل بعدنا او لأ زعلنا من بعض مهما حصل هفضل بحبك يأما هكره نفسي اوي حبي ليكي مش حاجه بعملها بمزاجي دي حاجه غصب عني انا بحبك غصبا عن قلبي و عقلي و كل حاجه عارف انك مبتحبيش الأعتذار بس انا اسف اسف عشان حجات كتير اوي مش هقولها بس لازم تعرفي اني اسف وان اي حاجه عملتها دايقتك مكنتش فكرت قبل م اعملها لو كنت فكرت واحد ف الميه مكنتش عملتها بس يمكن كنت مدايق متعصب كلنا بنغلط صح كلنا بنغلط المهم اني اعترف اني غلطت انا عارف اني غلطت ف انا اسف بس ده مش معناه اني بنكر انك بارده و مستفزه و رخمه و لما بتدايقي بتقولي ارخم كلام ف الدنيا حتي لو مش من قلبك بس بيبقي رخم بس انا اسف انا فعلا اسف تقريبا انتي لسه تحت وانا لسه مخلص هبعتهولك لو مردتش عليكي يبقي نمت لاني فرهدت خلاص مش قادر بس عايز اقولك اني بحبك ولله وبحبك كلمه بسيطه اوي فعلا وعمرها م تعبر عن الي ف قلبي ليكي وانا قلبي كله ليكي اصلا ف انا بحبك ☺️❤️'}
+                `;
+            }
+        }
+
+
+        function checkAnswer(selectedOption) {
+            if (selectedOption === quizData[currentQuestionIndex].answer) {
+                score++;
+            }
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+
+</html>

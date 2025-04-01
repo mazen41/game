@@ -1,0 +1,249 @@
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background: #F875AA;
+}
+
+.control-buttons {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background-color: rgba(3, 169, 244, 0.9);
+    display: none;
+
+    h2 {
+        position: absolute;
+        left: 50%;
+        top: 39%;
+        transform: translate(-50%, -50%);
+        color: #FFF;
+        padding: 15px 25px;
+        font-size: 25px;
+        text-align: center;
+        cursor: pointer;
+    }
+}
+
+.control-buttons span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #F44336;
+    color: #FFF;
+    padding: 15px 25px;
+    font-size: 30px;
+    text-align: center;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+body .container {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    // display: flex;
+    // justify-content: center;
+    .question, .to-link {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+    .to-link {
+        display: flex;
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    }
+    .info-container {
+        max-width: 1080px;
+        margin: 20px auto 0;
+        background-color: #F6F6F6;
+        padding: 20px;
+        font-size: 24px;
+        overflow: hidden;
+        border: 2px solid #2196f3;
+        display: none;
+    }
+
+    .info-container .name {
+        float: left;
+        width: 50%;
+    }
+
+    .info-container .tries {
+        float: right;
+        width: 50%;
+        text-align: right;
+    }
+
+    .memory-game-blocks {
+        margin: 20px auto;
+        display: none;
+        grid-template-columns: 140px 140px 140px 140px;
+        grid-template-rows: 125px 125px 125px 125px;
+        justify-content: center;
+    }
+
+    .memory-game-blocks.no-clicking {
+        pointer-events: none;
+    }
+
+    .memory-game-blocks .game-block {
+        height: 110px;
+        transition: transform .5s;
+        transform-style: preserve-3d;
+        cursor: pointer;
+        position: relative;
+        flex: 1 0 200px;
+        margin: 0 10px 20px;
+    }
+
+    .memory-game-blocks .game-block .front {
+        background-color: #333;
+        line-height: 200px;
+    }
+
+    .memory-game-blocks .game-block .front:before {
+        content: '!';
+        color: #FFF;
+        font-size: 89px;
+        font-weight: bold;
+        position: relative;
+        top: -41px;
+    }
+
+    .memory-game-blocks .game-block .back {
+        background-color: #607D8B;
+        transform: rotateY(180deg);
+    }
+
+    .memory-game-blocks .game-block .back img {
+        width: 85px;
+        height: 88px;
+        margin-top: 6px;
+    
+    
+    }
+
+    .memory-game-blocks .game-block .face {
+        position: absolute;
+        text-align: center;
+        backface-visibility: hidden;
+        border: 2px solid #2196F3;
+        width: 108px;
+        height: 105px;
+        border-radius: 8px;
+    }
+
+    .memory-game-blocks .game-block.is-flipped,
+    .memory-game-blocks .game-block.has-match {
+        -webkit-transform: rotateY(180deg);
+        -moz-transform: rotateY(180deg);
+        transform: rotateY(180deg);
+        pointer-events: none;
+    }
+
+    .question, .to-link {
+        margin-left: -50px;
+
+        h2 {
+            font-weight: 400;
+            color: #FFF6F6;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+
+            button {
+                border: none;
+                // color: #FFF6F6;
+                // background: #FFDFDF;
+                border-radius: 8px;
+                width: 80px;
+                height: 30px;
+                cursor: pointer;
+                font-weight: 400;
+                font-size: 16px;
+                outline: none;
+                transition: 0.4s;
+            }
+
+            button:hover {
+                background: #AEDEFC;
+            }
+        }
+    }
+}
+@media (max-width: 560px) {
+    body .container .memory-game-blocks .game-block .face {
+        position: absolute;
+        text-align: center;
+        backface-visibility: hidden;
+        border: 2px solid #2196F3;
+        width: 85px;
+        height: 85px;
+        border-radius: 8px;
+    }
+    body .container .memory-game-blocks {
+        grid-template-columns: 110px 110px 117px 91px;
+        grid-template-rows: 125px 125px 125px 125px;
+    }
+    body .container .memory-game-blocks .game-block .front:before {
+        content: '!';
+        color: #FFF;
+        font-size: 67px;
+        font-weight: bold;
+        position: relative;
+        top: -54px;
+    }
+}
+@media (max-width: 450px) {
+    body .container .memory-game-blocks {
+        margin: 20px auto;
+        display: none;
+        grid-template-columns: 110px 110px 110px;
+        grid-template-rows: 125px 125px;
+    }
+}
+// Check Matched Block
+// function checkMatchedBlocks(firstBlock, secondBlock) {
+
+//     let triesElement = document.querySelector('.tries span');
+
+//     if (firstBlock.dataset.technology === secondBlock.dataset.technology) {
+
+//         firstBlock.classList.remove('is-flipped');
+//         secondBlock.classList.remove('is-flipped');
+
+//         firstBlock.classList.add('has-match');
+//         secondBlock.classList.add('has-match');
+
+//         document.getElementById('success').play();
+
+//     } else {
+
+//         // triesElement.innerHTML = parseInt(triesElement.innerHTML) + 1;
+
+
+//         setTimeout(() => {
+
+//             firstBlock.classList.remove('is-flipped');
+//             secondBlock.classList.remove('is-flipped');
+
+//         }, duration);
+
+//         document.getElementById('fail').play();
+
+//     }
+
+// }
